@@ -1,0 +1,23 @@
+name: SoulsLoad
+main: me.NoChance.SoulsLoad.SoulsLoad
+version: 1.0
+author: NoChance
+description: Add weight to every item.
+
+commands:
+   sl:
+      description: Main SoulsLoad Command
+      
+permissions:
+   soulsload.*:
+     description: Gives access to all PvPManager features
+     default: op
+     children:
+       soulsload.debug: true
+       sousload.reload: true
+   soulsload.debug:
+     description: Allow use of the debug command
+     default: false
+   soulsload.reload:
+     description: Allow reload of SoulsLoad
+     default: false

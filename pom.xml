@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>me.NoChance</groupId>
+	<artifactId>SoulsLoad</artifactId>
+	<version>1.0</version>
+	<repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<artifactId>bukkit</artifactId>
+			<groupId>org.bukkit</groupId>
+			<scope>provided</scope>
+			<version>1.6.2-R1.0</version>
+		</dependency>
+	</dependencies>
+</project>
