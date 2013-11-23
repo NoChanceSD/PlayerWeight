@@ -1,3 +1,4 @@
+Debug: false
 Max Weight: 180
 
 Less And Equal To:
@@ -346,4 +347,6 @@ WORKBENCH: 0
 WRITTEN_BOOK: 0
 YELLOW_FLOWER: 0
 
-Debug: false
+Update Check:
+  Enabled: true
+  Auto Update: true

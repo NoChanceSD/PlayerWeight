@@ -1,6 +1,7 @@
-package me.NoChance.SoulsLoad.Listener;
+package me.NoChance.PlayerWeight.Listener;
 
-import me.NoChance.SoulsLoad.SoulsLoad;
+import me.NoChance.PlayerWeight.PlayerWeight;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,9 +13,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class PlayerListener implements Listener {
 
-	private SoulsLoad plugin;
+	private PlayerWeight plugin;
 
-	public PlayerListener(SoulsLoad plugin) {
+	public PlayerListener(PlayerWeight plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}

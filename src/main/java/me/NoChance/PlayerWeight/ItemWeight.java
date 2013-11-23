@@ -1,4 +1,4 @@
-package me.NoChance.SoulsLoad;
+package me.NoChance.PlayerWeight;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +38,6 @@ public class ItemWeight extends ItemStack {
 	}
 
 	private int getConfigWeight() {
-		return SoulsLoad.plugin.getConfig().getInt(getMaterial().toString());
+		return PlayerWeight.plugin.getConfig().getInt(getMaterial().toString());
 	}
 }

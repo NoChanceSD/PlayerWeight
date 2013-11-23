@@ -1,11 +1,11 @@
-package me.NoChance.SoulsLoad;
+package me.NoChance.PlayerWeight;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class WeightManager {
 
-	private SoulsLoad plugin;
+	private PlayerWeight plugin;
 	private int maxWeight;
 	private double lessThan;
 	private double between1;
@@ -18,7 +18,7 @@ public class WeightManager {
 	private double speedPercent2;
 	private double speedPercent3;
 
-	public WeightManager(SoulsLoad plugin) {
+	public WeightManager(PlayerWeight plugin) {
 		this.plugin = plugin;
 		loadConfigVariables();
 	}
