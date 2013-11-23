@@ -5,13 +5,15 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemWeight extends ItemStack {
 
-	private int weight;
+	private double weight;
 	private Material type;
+	private int amount;
 
-	public ItemWeight(Material type) {
+	public ItemWeight(Material type, int amount) {
 		super(type);
 		this.type = type;
 		this.weight = getConfigWeight();
+		this.amount = amount;
 	}
 
 	public ItemWeight() {
@@ -22,11 +24,11 @@ public class ItemWeight extends ItemStack {
 		if (i == null)
 			return new ItemWeight();
 		else
-			return new ItemWeight(i.getType());
+			return new ItemWeight(i.getType(), i.getAmount());
 	}
 
-	public int getWeight() {
-		return weight;
+	public double getWeight() {
+		return amount * weight;
 	}
 
 	public void setWeight(int weight) {
@@ -37,7 +39,7 @@ public class ItemWeight extends ItemStack {
 		return this.type;
 	}
 
-	private int getConfigWeight() {
-		return PlayerWeight.plugin.getConfig().getInt(getMaterial().toString());
+	private double getConfigWeight() {
+		return PlayerWeight.plugin.getConfig().getDouble(getMaterial().toString());
 	}
 }

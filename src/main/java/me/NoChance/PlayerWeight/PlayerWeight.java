@@ -20,6 +20,11 @@ public class PlayerWeight extends JavaPlugin {
 	public void onEnable() {
 		PlayerWeight.plugin = this;
 		saveDefaultConfig();
+		if (getConfig().getInt("Config Version", 0) < 1) {
+			getConfig().options().copyDefaults(true);
+			getConfig().set("Config Version", 1);
+			saveConfig();
+		}
 		this.reloadConfig();
 		if (getConfig().getBoolean("Debug"))
 			new DebugListener(this);
@@ -39,26 +44,30 @@ public class PlayerWeight extends JavaPlugin {
 		if (label.equals("pw") && sender instanceof Player) {
 			Player p = (Player) sender;
 			if (args.length == 1) {
-				if (sender instanceof Player && getConfig().getBoolean("Debug")) {
-					if (args[0].equalsIgnoreCase("debug") && p.hasPermission("playerweight.debug")) {
+				if (args[0].equalsIgnoreCase("weight")) {
+					p.sendMessage("§6[§7PlayerWeight§6] §2Your weight is §6" + wM.getWeight(p));
+					return true;
+				}
+				if (args[0].equalsIgnoreCase("debug") && p.hasPermission("playerweight.debug")) {
+					if (getConfig().getBoolean("Debug")) {
 						if (!debug) {
 							debug = true;
 						} else if (debug) {
 							debug = false;
 						}
 						return true;
+					} else if (!getConfig().getBoolean("Debug")) {
+						p.sendMessage("§4Debug needs to be enabled in config!");
+						return true;
 					}
-
-				} else if (!getConfig().getBoolean("Debug")) {
-					p.sendMessage("§4Debug needs to be enabled in config!");
 				}
 				if (args[0].equalsIgnoreCase("reload") && p.hasPermission("playerweight.reload")) {
 					getServer().getPluginManager().disablePlugin(this);
 					getServer().getPluginManager().enablePlugin(this);
 					for (Player player : getServer().getOnlinePlayers()) {
-						wM.sumWeight(player);
+						wM.handler(player);
 					}
-					sender.sendMessage("PlayerWeight Reloaded!");
+					sender.sendMessage("§6[§7PlayerWeight§6] §fPlayerWeight Reloaded!");
 					return true;
 				}
 			}

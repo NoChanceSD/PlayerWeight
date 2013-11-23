@@ -1,18 +1,21 @@
-Debug: false
 Max Weight: 180
 
 Less And Equal To:
   Percentage: 24
   SpeedPercent: 105
+  Message: '&6[&7PlayerWeight&6]&a You Are Light, Nice!'
 Between:
   Percentage: 25,49
   SpeedPercent: 95
+  Message: '&6[&7PlayerWeight&6]&2 Getting Heavier, Be Careful!'
 Between1:
   Percentage: 50,100  
   SpeedPercent: 70
+  Message: '&6[&7PlayerWeight&6]&c You Are Heavy, Try to Lose Weight!'
 Bigger Than:
   Percentage: 100
   SpeedPercent: 50
+  Message: '&6[&7PlayerWeight&6]&4 Oh No! What Have You Done!'
 
 ANVIL: 0
 APPLE: 0
@@ -350,3 +353,6 @@ YELLOW_FLOWER: 0
 Update Check:
   Enabled: true
   Auto Update: true
+  
+Config Version: 1
+Debug: false

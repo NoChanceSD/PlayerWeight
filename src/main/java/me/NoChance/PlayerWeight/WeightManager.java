@@ -1,5 +1,8 @@
 package me.NoChance.PlayerWeight;
 
+import java.util.HashMap;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,41 +20,94 @@ public class WeightManager {
 	private double speedPercent1;
 	private double speedPercent2;
 	private double speedPercent3;
+	private HashMap<String, Integer> previousWeight = new HashMap<String, Integer>();
 
 	public WeightManager(PlayerWeight plugin) {
 		this.plugin = plugin;
 		loadConfigVariables();
 	}
 
-	public void sumWeight(Player p) {
-		int weight = 0;
+	public double getWeight(Player p) {
+		double weight = 0;
 		for (ItemStack i : p.getInventory().getContents()) {
 			weight += ItemWeight.getItemWeight(i).getWeight();
 		}
 		for (ItemStack i : p.getInventory().getArmorContents()) {
 			weight += ItemWeight.getItemWeight(i).getWeight();
 		}
-		calculateWeightPercentage(weight, p);
+		return weight;
 	}
 
-	public void calculateWeightPercentage(int weight, Player p) {
+	public void handler(Player p) {
+		int previousSector = 0;
+		int presentSector = getSector(calculateWeightPercentage(getWeight(p), p));
+		if (previousWeight.containsKey(p.getName()))
+			previousSector = previousWeight.put(p.getName(), presentSector);
+		else
+			previousWeight.put(p.getName(), presentSector);
+
+		if (presentSector > previousSector || (previousSector > 1 && presentSector == 1)) {
+			p.sendMessage(announce(presentSector));
+		}
+		calculateSpeed(presentSector, p);
+	}
+
+	private String announce(int sector) {
+		switch (sector) {
+		case 1:
+			return translateColor(plugin.getConfig().getString("Less And Equal To.Message"));
+		case 2:
+			return translateColor(plugin.getConfig().getString("Between.Message"));
+		case 3:
+			return translateColor(plugin.getConfig().getString("Between1.Message"));
+		case 4:
+			return translateColor(plugin.getConfig().getString("Bigger Than.Message"));
+		}
+		return null;
+	}
+
+	private String translateColor(String message) {
+		return ChatColor.translateAlternateColorCodes('&', message);
+	}
+
+	public Float calculateWeightPercentage(double weight, Player p) {
 		float weightPercent = (float) weight / getMaxW();
 		if (weightPercent > 1)
 			p.setExp(1);
 		else
 			p.setExp(weightPercent);
-		calculateSpeed(weightPercent, p);
+
+		return weightPercent;
 	}
 
-	public void calculateSpeed(float weightPercent, Player p) {
-		if (weightPercent <= lessThan)
+	public void calculateSpeed(int sector, Player p) {
+		switch (sector) {
+		case 1:
 			p.setWalkSpeed(speed(speedPercent));
-		if (weightPercent >= between1 && weightPercent <= between1_1)
+			break;
+		case 2:
 			p.setWalkSpeed(speed(speedPercent1));
-		if (weightPercent >= between2 && weightPercent <= between2_1)
+			break;
+		case 3:
 			p.setWalkSpeed(speed(speedPercent2));
-		if (weightPercent > biggerThan)
+			break;
+		case 4:
 			p.setWalkSpeed(speed(speedPercent3));
+			break;
+		}
+	}
+
+	private int getSector(float weightPercent) {
+		if (weightPercent <= lessThan)
+			return 1;
+		if (weightPercent >= between1 && weightPercent <= between1_1)
+			return 2;
+		if (weightPercent >= between2 && weightPercent <= between2_1)
+			return 3;
+		if (weightPercent > biggerThan)
+			return 4;
+		else
+			return 0;
 	}
 
 	public int getMaxW() {

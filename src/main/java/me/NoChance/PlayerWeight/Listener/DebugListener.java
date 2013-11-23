@@ -21,6 +21,7 @@ public class DebugListener implements Listener {
 		Player p = event.getPlayer();
 		if (plugin.debug) {
 			p.sendMessage("Speed: " + p.getWalkSpeed());
+			p.sendMessage("Percentage: " + plugin.wM.calculateWeightPercentage(plugin.wM.getWeight(p), p)+ "%");
 		}
 	}
 }

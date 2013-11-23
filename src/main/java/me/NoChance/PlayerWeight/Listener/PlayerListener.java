@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerDrop(PlayerDropItemEvent event) {
 		Player p = event.getPlayer();
-		plugin.wM.sumWeight(p);
+		plugin.wM.handler(p);
 	}
 
 	@EventHandler
@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
 	public void delay(final Player p, long ticks) {
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			public void run() {
-				plugin.wM.sumWeight(p);
+				plugin.wM.handler(p);
 			}
 		}, ticks);
 	}
