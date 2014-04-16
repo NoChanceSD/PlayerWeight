@@ -1,7 +1,6 @@
 package me.NoChance.PlayerWeight;
 
 import java.util.HashMap;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +38,8 @@ public class WeightManager {
 	}
 
 	public void handler(Player p) {
+		if (p.hasPermission("playerweight.bypass"))
+			return;
 		int previousSector = 0;
 		int presentSector = getSector(calculateWeightPercentage(getWeight(p), p));
 		if (previousWeight.containsKey(p.getName()))
@@ -72,12 +73,17 @@ public class WeightManager {
 
 	public Float calculateWeightPercentage(double weight, Player p) {
 		float weightPercent = (float) weight / getMaxW();
+		if (plugin.getConfig().getBoolean("Enable XP Bar", true)) {
+			setExp(weightPercent, p);
+		}
+		return weightPercent;
+	}
+
+	public void setExp(Float weightPercent, Player p) {
 		if (weightPercent > 1)
 			p.setExp(1);
 		else
 			p.setExp(weightPercent);
-
-		return weightPercent;
 	}
 
 	public void calculateSpeed(int sector, Player p) {
