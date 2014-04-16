@@ -20,9 +20,9 @@ public class PlayerWeight extends JavaPlugin {
 	public void onEnable() {
 		PlayerWeight.plugin = this;
 		saveDefaultConfig();
-		if (getConfig().getInt("Config Version", 0) < 1) {
+		if (getConfig().getInt("Config Version", 0) < 3) {
 			getConfig().options().copyDefaults(true);
-			getConfig().set("Config Version", 1);
+			getConfig().set("Config Version", 3);
 			saveConfig();
 		}
 		this.reloadConfig();
@@ -45,7 +45,7 @@ public class PlayerWeight extends JavaPlugin {
 			Player p = (Player) sender;
 			if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("weight")) {
-					p.sendMessage("§6[§7PlayerWeight§6] §2Your weight is §6" + wM.getWeight(p));
+					p.sendMessage("Â§6[Â§7PlayerWeightÂ§6] Â§2Your weight is Â§6" + wM.getWeight(p));
 					return true;
 				}
 				if (args[0].equalsIgnoreCase("debug") && p.hasPermission("playerweight.debug")) {
@@ -57,7 +57,7 @@ public class PlayerWeight extends JavaPlugin {
 						}
 						return true;
 					} else if (!getConfig().getBoolean("Debug")) {
-						p.sendMessage("§4Debug needs to be enabled in config!");
+						p.sendMessage("Â§4Debug needs to be enabled in config!");
 						return true;
 					}
 				}
@@ -67,12 +67,12 @@ public class PlayerWeight extends JavaPlugin {
 					for (Player player : getServer().getOnlinePlayers()) {
 						wM.handler(player);
 					}
-					sender.sendMessage("§6[§7PlayerWeight§6] §fPlayerWeight Reloaded!");
+					sender.sendMessage("Â§6[Â§7PlayerWeightÂ§6] Â§fPlayerWeight Reloaded!");
 					return true;
 				}
 			}
 		}
-		sender.sendMessage("§4You don't have Permission!");
+		sender.sendMessage("Â§4You don't have Permission!");
 		return false;
 	}
 
