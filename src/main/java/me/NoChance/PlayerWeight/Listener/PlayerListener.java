@@ -48,6 +48,8 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerExpGain(PlayerExpChangeEvent event) {
+		if(!plugin.getConfig().getBoolean("Enable XP Bar", true))
+			return;
 		event.setAmount(0);
 	}
 
