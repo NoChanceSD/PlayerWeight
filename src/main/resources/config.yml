@@ -1,5 +1,6 @@
 Max Weight: 180
 Enable XP Bar: true
+WeightCommand: '&6[&7PlayerWeight&6] &2Your weight is &6<weight>&2/&6<maxweight> &2(&6<weightpercent>%&2)'
 
 Less And Equal To:
   Percentage: 24
@@ -355,5 +356,5 @@ Update Check:
   Enabled: true
   Auto Update: true
   
-Config Version: 3
+Config Version: 4
 Debug: false
