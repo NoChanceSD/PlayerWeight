@@ -1,7 +1,6 @@
 package me.NoChance.PlayerWeight;
 
 import java.util.HashMap;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,10 +28,10 @@ public class WeightManager {
 	public double getWeight(Player p) {
 		double weight = 0;
 		for (ItemStack i : p.getInventory().getContents()) {
-			weight += ItemWeight.getItemWeight(i).getWeight();
+			weight += ItemWeight.getItemWeight(i);
 		}
 		for (ItemStack i : p.getInventory().getArmorContents()) {
-			weight += ItemWeight.getItemWeight(i).getWeight();
+			weight += ItemWeight.getItemWeight(i);
 		}
 		return weight;
 	}
@@ -56,19 +55,15 @@ public class WeightManager {
 	private String announce(int sector) {
 		switch (sector) {
 		case 1:
-			return translateColor(plugin.getConfig().getString("Less And Equal To.Message"));
+			return plugin.translateColor(plugin.getConfig().getString("Less And Equal To.Message"));
 		case 2:
-			return translateColor(plugin.getConfig().getString("Between.Message"));
+			return plugin.translateColor(plugin.getConfig().getString("Between.Message"));
 		case 3:
-			return translateColor(plugin.getConfig().getString("Between1.Message"));
+			return plugin.translateColor(plugin.getConfig().getString("Between1.Message"));
 		case 4:
-			return translateColor(plugin.getConfig().getString("Bigger Than.Message"));
+			return plugin.translateColor(plugin.getConfig().getString("Bigger Than.Message"));
 		}
 		return null;
-	}
-
-	private String translateColor(String message) {
-		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
 	public Float calculateWeightPercentage(double weight, Player p) {

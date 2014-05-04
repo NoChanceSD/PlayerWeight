@@ -4,10 +4,12 @@ import java.io.IOException;
 import me.NoChance.PlayerWeight.Updater.UpdateResult;
 import me.NoChance.PlayerWeight.Listener.DebugListener;
 import me.NoChance.PlayerWeight.Listener.PlayerListener;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.MetricsLite;
 
 public class PlayerWeight extends JavaPlugin {
@@ -20,9 +22,9 @@ public class PlayerWeight extends JavaPlugin {
 	public void onEnable() {
 		PlayerWeight.plugin = this;
 		saveDefaultConfig();
-		if (getConfig().getInt("Config Version", 0) < 3) {
+		if (getConfig().getInt("Config Version", 0) < 4) {
 			getConfig().options().copyDefaults(true);
-			getConfig().set("Config Version", 3);
+			getConfig().set("Config Version", 4);
 			saveConfig();
 		}
 		this.reloadConfig();
@@ -31,12 +33,17 @@ public class PlayerWeight extends JavaPlugin {
 		new PlayerListener(this);
 		this.wM = new WeightManager(this);
 		if (getConfig().getBoolean("Update Check.Enabled"))
-			updater();
-		try {
-			MetricsLite metrics = new MetricsLite(this);
-			metrics.start();
-		} catch (IOException e) {
-		}
+			new BukkitRunnable() {
+				public void run() {
+					updater();
+				}
+			}.runTaskAsynchronously(this);
+
+		 try {
+		 MetricsLite metrics = new MetricsLite(this);
+		 metrics.start();
+		 } catch (IOException e) {
+		 }
 	}
 
 	@Override
@@ -45,7 +52,12 @@ public class PlayerWeight extends JavaPlugin {
 			Player p = (Player) sender;
 			if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("weight")) {
-					p.sendMessage("§6[§7PlayerWeight§6] §2Your weight is §6" + wM.getWeight(p));
+					double weight = wM.getWeight(p);
+
+					String message = translateColor(getConfig().getString("WeightCommand")).replace("<weight>", String.valueOf(weight))
+							.replace("<maxweight>", String.valueOf(wM.getMaxW()))
+							.replace("<weightpercent>", String.valueOf((int) (wM.calculateWeightPercentage(weight, p) * 100)));
+					p.sendMessage(message);
 					return true;
 				}
 				if (args[0].equalsIgnoreCase("debug") && p.hasPermission("playerweight.debug")) {
@@ -74,6 +86,10 @@ public class PlayerWeight extends JavaPlugin {
 		}
 		sender.sendMessage("§4You don't have Permission!");
 		return false;
+	}
+
+	public String translateColor(String message) {
+		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
 	public void updater() {
