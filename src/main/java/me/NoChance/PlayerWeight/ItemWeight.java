@@ -1,45 +1,43 @@
 package me.NoChance.PlayerWeight;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemWeight extends ItemStack {
 
 	private double weight;
-	private Material type;
-	private int amount;
 
-	public ItemWeight(Material type, int amount) {
-		super(type);
-		this.type = type;
+	public ItemWeight(ItemStack i) {
+		super(i);
 		this.weight = getConfigWeight();
-		this.amount = amount;
 	}
 
 	public ItemWeight() {
 		this.weight = 0;
 	}
 
-	public static ItemWeight getItemWeight(ItemStack i) {
+	public static double getItemWeight(ItemStack i) {
 		if (i == null)
-			return new ItemWeight();
+			return 0;
 		else
-			return new ItemWeight(i.getType(), i.getAmount());
+			return new ItemWeight(i).getWeight();
 	}
 
 	public double getWeight() {
-		return amount * weight;
+		return this.getAmount() * weight;
 	}
 
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
 
-	public Material getMaterial() {
-		return this.type;
+	public String getMaterial() {
+		short durability = this.getDurability();
+		if (durability > 0)
+			return this.getType().toString() + "," + durability;
+		return this.getType().toString();
 	}
 
 	private double getConfigWeight() {
-		return PlayerWeight.plugin.getConfig().getDouble(getMaterial().toString());
+		return PlayerWeight.plugin.getConfig().getDouble(getMaterial());
 	}
 }
