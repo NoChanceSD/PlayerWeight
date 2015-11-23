@@ -1,6 +1,9 @@
 package me.NoChance.PlayerWeight;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 import me.NoChance.PlayerWeight.Updater.UpdateResult;
 import me.NoChance.PlayerWeight.Listener.DebugListener;
 import me.NoChance.PlayerWeight.Listener.PlayerListener;
@@ -22,9 +25,9 @@ public class PlayerWeight extends JavaPlugin {
 	public void onEnable() {
 		PlayerWeight.plugin = this;
 		saveDefaultConfig();
-		if (getConfig().getInt("Config Version", 0) < 4) {
+		if (getConfig().getInt("Config Version", 0) < 5) {
 			getConfig().options().copyDefaults(true);
-			getConfig().set("Config Version", 4);
+			getConfig().set("Config Version", 5);
 			saveConfig();
 		}
 		this.reloadConfig();
@@ -39,27 +42,27 @@ public class PlayerWeight extends JavaPlugin {
 				}
 			}.runTaskAsynchronously(this);
 
-		 try {
-		 MetricsLite metrics = new MetricsLite(this);
-		 metrics.start();
-		 } catch (IOException e) {
-		 }
+		try {
+			MetricsLite metrics = new MetricsLite(this);
+			metrics.start();
+		} catch (IOException e) {
+		}
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (label.equals("pw") && sender instanceof Player) {
+		if (command.getLabel().equals("pw") && sender instanceof Player) {
 			Player p = (Player) sender;
-			if (args.length == 1) {
-				if (args[0].equalsIgnoreCase("weight")) {
-					double weight = wM.getWeight(p);
-
-					String message = translateColor(getConfig().getString("WeightCommand")).replace("<weight>", String.valueOf(weight))
-							.replace("<maxweight>", String.valueOf(wM.getMaxW()))
-							.replace("<weightpercent>", String.valueOf((int) (wM.calculateWeightPercentage(weight, p) * 100)));
-					p.sendMessage(message);
-					return true;
-				}
+			if (args.length == 0) {
+				double weight = wM.getWeight(p);
+				DecimalFormatSymbols symbol = new DecimalFormatSymbols();
+				symbol.setDecimalSeparator('.');
+				String message = translateColor(getConfig().getString("WeightCommand")).replace("<weight>", new DecimalFormat("#.##", symbol).format(weight))
+						.replace("<maxweight>", String.valueOf(wM.getMaxW()))
+						.replace("<weightpercent>", String.valueOf((int) (wM.calculateWeightPercentage(weight, p) * 100)));
+				p.sendMessage(message);
+				return true;
+			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("debug") && p.hasPermission("playerweight.debug")) {
 					if (getConfig().getBoolean("Debug")) {
 						if (!debug) {

@@ -41,13 +41,15 @@ public class WeightManager {
 			return;
 		int previousSector = 0;
 		int presentSector = getSector(calculateWeightPercentage(getWeight(p), p));
-		if (previousWeight.containsKey(p.getName()))
-			previousSector = previousWeight.put(p.getName(), presentSector);
-		else
-			previousWeight.put(p.getName(), presentSector);
+		if (!plugin.getConfig().getBoolean("Disable Messages", false)) {
+			if (previousWeight.containsKey(p.getName()))
+				previousSector = previousWeight.put(p.getName(), presentSector);
+			else
+				previousWeight.put(p.getName(), presentSector);
 
-		if (presentSector > previousSector || (previousSector > 1 && presentSector == 1)) {
-			p.sendMessage(announce(presentSector));
+			if (presentSector > previousSector || (previousSector > 1 && presentSector == 1)) {
+				p.sendMessage(announce(presentSector));
+			}
 		}
 		calculateSpeed(presentSector, p);
 	}
